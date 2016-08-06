@@ -90,7 +90,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="../logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -178,7 +178,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 style="margin-top: 7%; margin-bottom: 0;"class="page-header">Dashboard</h3>
+                    <h3 style="margin-top: 60px; margin-bottom: 0;"class="page-header">Dashboard</h3>
                 </div>
                 <!-- /.col-lg-12 -->
                 <div id="here"></div>

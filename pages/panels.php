@@ -90,7 +90,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href="../logout.php"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -178,7 +178,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         <div id="page-wrapper">
             <div class="row" style="maring-bottom: 0;">
                 <div class="col-lg-12">
-                    <h3 style="margin-top: 7%; margin-bottom: 0;" class="page-header">Panels</h3>
+                    <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header">Panels</h3>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -202,7 +202,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="volunteers">
                                     
-                                        <table class="table table-striped table-bordered table-hover" id="panels-volunteers" style="font-size: 14px;">
+                                        <table class="table table-striped table-bordered table-hover" id="panels-volunteers" style="font-size: 13px;">
                                             <thead>
                                                 <tr>
                                                     <th>Volunteer</th>
