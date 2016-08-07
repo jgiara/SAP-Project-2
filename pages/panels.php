@@ -190,7 +190,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         <div class="panel-body">
                             <!-- Nav tabs -->
 
-                            <ul id="here" class="nav nav-tabs">
+                            <ul id="tabs-list" class="nav nav-tabs">
                                 <li class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
                                 </li>
                                 <li><a href="#attendance" data-toggle="tab">Attendance</a>
@@ -238,7 +238,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                     </select>
 
                                 </div>
-                                <a href="#" class="btn btn-primary" id="semester-submit">Go</a>
+                                <button class="btn btn-primary" id="semester-submit">Go</button>
                             </ul>
 
                             <!-- Tab panes -->
@@ -381,12 +381,15 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     
     
 
-        $('#semester-submit').on("click",function(e) {
+        $('#tabs-list').on("click", "button", function() {
             
             var s = document.getElementById("panel-semester");
             var selectedSemester = s.options[s.selectedIndex].value;
             var y = document.getElementById("panel-year");
             var selectedYear = y.options[y.selectedIndex].value;
+            table.clear();
+
+           
 
             //document.getElementById("panels-header").innerHTML = "HELLO";
             
@@ -407,13 +410,16 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         item.shift_time,
                         item.requirements_status
                     ])
-                    //$("<tr><td>"+item.first_name+"</td><td>"+item.last_name+"</td><td>"+item.class+"</td><td>"+item.school+"</td><td>"+item.shift_day+"</td><td>"+item.shift_time+"</td><td>"+item.requirements_status+"</td></tr>").appendTo('#tablebody-vols');
+                    
                 });
             })
             .fail(function() {
                 console.log("getJSON error");
             });
+
+            setTimeout(function() {
             table.draw();
+        }, 300);
             
             
         });
