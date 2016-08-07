@@ -178,7 +178,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         <div id="page-wrapper">
             <div class="row" style="maring-bottom: 0;">
                 <div class="col-lg-12">
-                    <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header">Panels</h3>
+                    <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header" id="panels-header">Panels</h3>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -189,19 +189,61 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <!-- Nav tabs -->
-                            <ul class="nav nav-tabs">
+
+                            <ul id="here" class="nav nav-tabs">
                                 <li class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
                                 </li>
                                 <li><a href="#attendance" data-toggle="tab">Attendance</a>
                                 </li>
                                 <li><a href="#requirements" data-toggle="tab">Requirements</a>
                                 </li>
+                                
+                                <div class="col-xs-2">
+                                <select name="panel-semester" class="form-control form-control-xs" id="panel-semester" style="text-align: right;">
+                                        <?php
+                                            $currMonth = date("n");
+                                            $currSemester = "Fall";
+                                            if($currMonth < 6) {
+                                                $currSemester = "Spring";
+                                            }
+                                            echo "<option value='Fall'";
+                                            if($currSemester == "Fall") {
+                                                echo "selected='selected'>Fall</option>";
+                                            }
+                                            else {
+                                                echo ">Fall</option>";
+                                            }
+                                            echo "<option value='Spring'";
+                                            if($currSemester == "Spring") {
+                                                echo "selected='selected'>Spring</option>";
+                                            }
+                                            else {
+                                                echo ">Spring</option>";
+                                            }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-xs-2">
+                                    <select name="panel-year" class="form-control form-control-xs" id="panel-year" style="text-align: right;">
+                                        <?php
+                                            $currYear = date("Y");
+                                            $yearHolder = $currYear;
+                                            echo "<option value='".$yearHolder."' selected='selected'>".$yearHolder."</option>";
+                                            $yearHolder--;
+                                            while($yearHolder >= 2015) {
+                                                echo "<option value='".$yearHolder."'>".$yearHolder."</option>";
+                                                $yearHolder--;
+                                            }
+                                        ?>
+                                    </select>
+
+                                </div>
+                                <a href="#" class="btn btn-primary" id="semester-submit">Go</a>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="volunteers">
-                                    
                                         <table class="table table-striped table-bordered table-hover" id="panels-volunteers" style="font-size: 13px;">
                                             <thead>
                                                 <tr>
@@ -211,7 +253,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     <th>School</th>
                                                     <th>Shift Day</th>
                                                     <th>Shift Time</th>
-                                                    <th>Requirement Status</th>
+                                                    <th>Requirements</th>
                                                 </tr>
                                                 <tr>
                                                     <td>First Name</td>
@@ -220,10 +262,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     <td>School</td>
                                                     <td>Shift Day</td>
                                                     <td>Shift Time</td>
-                                                    <td>Requirement Status</td>
-                    
-                                            
-        
+                                                    <td>Requirements</td>
                                                 </tr>
                                             </thead>
                                             
@@ -249,9 +288,13 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                                 die( "bad query".mysqli_error( $dbc ) );
                                                         return $result;
                                                     }
-
+                                                    $currYear = date("Y");
+                                                    $currSemester = "Fall";
+                                                    if($currMonth < 6) {
+                                                        $currSemester = "Spring";
+                                                    }
                                                     $dbc    = connect_to_db( "SAP" ); 
-                                                    $query  = "select * from Program_Members join Users on user = eagle_id and program = 1 order by last_name asc";
+                                                    $query  = "select * from Program_Members, Users, Programs where user=eagle_id and program=program_id and program_name='Panels' and semester='$currSemester' and year='$currYear' order by last_name asc";
                                                     $result = perform_query( $dbc, $query );
                                                     while($row = mysqli_fetch_array( $result, MYSQLI_ASSOC )) {
                                                         echo "<tr class = odd>";
@@ -314,28 +357,63 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <script>
     $(document).ready(function() {
     // Setup - add a text input to each footer cell
-    $('#panels-volunteers thead td').each( function () {
-        var title = $(this).text();
-        $(this).css('text-align', 'center');
-        $(this).html( '<input type="text"/>' );
-        $(this).children('input').css('width', '100%');
-    } );
- 
-    // DataTable
-    var table = $('#panels-volunteers').DataTable({
-        responsive: true,
-        orderCellsTop: true
-    });
- 
-    // Apply the search
-    table.columns().every(function (index) {
-    $('#panels-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
-        table.column($(this).parent().index() + ':visible')
-            .search(this.value)
-            .draw();
+        $('#panels-volunteers thead td').each( function () {
+            var title = $(this).text();
+            $(this).css('text-align', 'center');
+            $(this).html( '<input type="text"/>' );
+            $(this).children('input').css('width', '100%');
         } );
-    } );
-} );
+     
+        // DataTable
+        var table = $('#panels-volunteers').DataTable({
+            responsive: true,
+            orderCellsTop: true
+        });
+     
+        // Apply the search
+        table.columns().every(function (index) {
+        $('#panels-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
+            table.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+            } );
+        } );
+    
+    
+
+        $('#semester-submit').on("click",function(e) {
+            
+            var s = document.getElementById("panel-semester");
+            var selectedSemester = s.options[s.selectedIndex].value;
+            var y = document.getElementById("panel-year");
+            var selectedYear = y.options[y.selectedIndex].value;
+
+            document.getElementById("panels-header").innerHTML = "HELLO";
+            
+            
+            $.getJSON("../include/getProgramVolunteers.php", 
+            {
+                program: "Panels",
+                semester: selectedSemester,
+                year: selectedYear
+            }, function(data) {
+                $.each(data, function(i, item) {
+                    table.row.add({
+                        "First Name": item.first_name,
+                        "Last Name" : item.last_name
+                        
+                    })
+                    //$("<tr><td>"+item.first_name+"</td><td>"+item.last_name+"</td><td>"+item.class+"</td><td>"+item.school+"</td><td>"+item.shift_day+"</td><td>"+item.shift_time+"</td><td>"+item.requirements_status+"</td></tr>").appendTo('#tablebody-vols');
+                });
+            })
+            .fail(function() {
+                console.log("getJSON error");
+            });
+            table.draw();
+            e.preventDefault();
+            
+        });
+    });
     </script>
 
 </body>
