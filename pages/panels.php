@@ -30,7 +30,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dashboard - Student Admission Program - Boston College</title>
+    <title>Panels - Student Admission Program - Boston College</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -205,15 +205,28 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                         <table class="table table-striped table-bordered table-hover" id="panels-volunteers" style="font-size: 13px;">
                                             <thead>
                                                 <tr>
-                                                    <th>Volunteer</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
                                                     <th>Class</th>
                                                     <th>School</th>
                                                     <th>Shift Day</th>
                                                     <th>Shift Time</th>
                                                     <th>Requirement Status</th>
-                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td>First Name</td>
+                                                    <td>Last Name</td>
+                                                    <td>Class</td>
+                                                    <td>School</td>
+                                                    <td>Shift Day</td>
+                                                    <td>Shift Time</td>
+                                                    <td>Requirement Status</td>
+                    
+                                            
+        
                                                 </tr>
                                             </thead>
+                                            
                                             <tbody id="tablebody-vols">
                                                 <?php 
                                                     function connect_to_db( $dbname ){
@@ -242,7 +255,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     $result = perform_query( $dbc, $query );
                                                     while($row = mysqli_fetch_array( $result, MYSQLI_ASSOC )) {
                                                         echo "<tr class = odd>";
-                                                        echo "<td>".$row['first_name']." ".$row['last_name']."</td>";
+                                                        echo "<td>".$row['first_name']."</td>";
+                                                        echo "<td>".$row['last_name']."</td>";
                                                         echo "<td>".$row['class']."</td>";
                                                         echo "<td>".$row['school']."</td>";
                                                         echo "<td>".$row['shift_day']."</td>";
@@ -289,17 +303,39 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <!-- DataTables JavaScript -->
     <script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+    
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
 
+
+
     
     <script>
     $(document).ready(function() {
-        $('#panels-volunteers').DataTable({
-                responsive: true
-        });
+    // Setup - add a text input to each footer cell
+    $('#panels-volunteers thead td').each( function () {
+        var title = $(this).text();
+        $(this).css('text-align', 'center');
+        $(this).html( '<input type="text"/>' );
+        $(this).children('input').css('width', '100%');
+    } );
+ 
+    // DataTable
+    var table = $('#panels-volunteers').DataTable({
+        responsive: true,
+        orderCellsTop: true
     });
+ 
+    // Apply the search
+    table.columns().every(function (index) {
+    $('#panels-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
+        table.column($(this).parent().index() + ':visible')
+            .search(this.value)
+            .draw();
+        } );
+    } );
+} );
     </script>
 
 </body>
