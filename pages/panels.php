@@ -388,7 +388,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             var y = document.getElementById("panel-year");
             var selectedYear = y.options[y.selectedIndex].value;
 
-            document.getElementById("panels-header").innerHTML = "HELLO";
+            //document.getElementById("panels-header").innerHTML = "HELLO";
             
             
             $.getJSON("../include/getProgramVolunteers.php", 
@@ -398,11 +398,15 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 year: selectedYear
             }, function(data) {
                 $.each(data, function(i, item) {
-                    table.row.add({
-                        "First Name": item.first_name,
-                        "Last Name" : item.last_name
-                        
-                    })
+                    table.row.add([
+                        item.first_name,
+                        item.last_name,
+                        item.class,
+                        item.school,
+                        item.shift_day,
+                        item.shift_time,
+                        item.requirements_status
+                    ])
                     //$("<tr><td>"+item.first_name+"</td><td>"+item.last_name+"</td><td>"+item.class+"</td><td>"+item.school+"</td><td>"+item.shift_day+"</td><td>"+item.shift_time+"</td><td>"+item.requirements_status+"</td></tr>").appendTo('#tablebody-vols');
                 });
             })
@@ -410,7 +414,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 console.log("getJSON error");
             });
             table.draw();
-            e.preventDefault();
+            
             
         });
     });
