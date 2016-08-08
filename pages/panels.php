@@ -294,7 +294,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                         $currSemester = "Spring";
                                                     }
                                                     $dbc    = connect_to_db( "SAP" ); 
-                                                    $query  = "select * from Program_Members, Users, Programs where user=eagle_id and program=program_id and program_name='Panels' and semester='$currSemester' and year='$currYear' order by last_name asc";
+                                                    $query  = "select * from Program_Members, Users, Programs where user=eagle_id and program=program_id and program_name='Panels' and semester='Spring' and year='$currYear' order by last_name asc";
                                                     $result = perform_query( $dbc, $query );
                                                     while($row = mysqli_fetch_array( $result, MYSQLI_ASSOC )) {
                                                         echo "<tr class = odd>";
@@ -409,8 +409,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         item.shift_day,
                         item.shift_time,
                         item.requirements_status
-                    ])
-                    
+                    ]);
                 });
             })
             .fail(function() {
@@ -422,6 +421,38 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         }, 300);
             
             
+        });
+
+        $('#panels-volunteers tbody td').dblclick(function(e) {
+            var currentEle = $(this);
+            var value = $(this).html();
+            var row = table.cell($(this)).index().row;
+            var column = table.cell($(this)).index().column;
+            var data = table.row(row).data();
+            alert(data[0]);
+
+            
+            $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
+            $(".thVal").focus();
+            $(".thVal").keyup(function (event) {
+            if (event.keyCode == 13) {
+               
+                data[column] =  document.getElementById("newvalue").value.trim();
+                table.row(row).remove();
+                table.row.add([
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[3],
+                    data[4],
+                    data[5],
+                    data[6]
+
+                ]);
+
+                table.draw();
+            }
+            });
         });
     });
     </script>
