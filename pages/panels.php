@@ -422,8 +422,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             
             
         });
-
-        $('#panels-volunteers tbody td').dblclick(function(e) {
+        
+        $('#panels-volunteers tbody').on('dblclick', 'td', function(e) {
             var currentEle = $(this);
             var value = $(this).html();
             var row = table.cell($(this)).index().row;
@@ -438,7 +438,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             if (event.keyCode == 13) {
                
                 data[column] =  document.getElementById("newvalue").value.trim();
-                table.row(row).remove();
+                table.row(row).remove().draw();
+                
                 table.row.add([
                     data[0],
                     data[1],
@@ -448,12 +449,15 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                     data[5],
                     data[6]
 
-                ]);
-
-                table.draw();
+                ]).draw();
             }
             });
+            $('tbody td').not(currentEle).on('click', function() {
+
+                $(currentEle).html(value);
+            })  
         });
+        
     });
     </script>
 
