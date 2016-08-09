@@ -254,6 +254,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     <th>Shift Day</th>
                                                     <th>Shift Time</th>
                                                     <th>Requirements</th>
+                                                    <th>Eagle Id</th>
                                                 </tr>
                                                 <tr>
                                                     <td>First Name</td>
@@ -263,6 +264,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     <td>Shift Day</td>
                                                     <td>Shift Time</td>
                                                     <td>Requirements</td>
+                                                    <td>Eagle Id</td>
                                                 </tr>
                                             </thead>
                                             
@@ -305,6 +307,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                         echo "<td>".$row['shift_day']."</td>";
                                                         echo "<td>".$row['shift_time']."</td>";
                                                         echo "<td>".$row['requirements_status']."</td>";
+                                                        echo "<td>".$row['eagle_id']."</td>";
                                                         echo "</tr>";
                                                         
                                                     }
@@ -367,7 +370,14 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         // DataTable
         var table = $('#panels-volunteers').DataTable({
             responsive: true,
-            orderCellsTop: true
+            orderCellsTop: true,
+            "columnDefs": [
+            {
+                "targets": [7],
+                "visible": false,
+                "orderable": false
+                
+            }]
         });
      
         // Apply the search
@@ -408,7 +418,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         item.school,
                         item.shift_day,
                         item.shift_time,
-                        item.requirements_status
+                        item.requirements_status,
+                        item.eagle_id
                     ]);
                 });
             })
@@ -429,8 +440,9 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             var row = table.cell($(this)).index().row;
             var column = table.cell($(this)).index().column;
             var data = table.row(row).data();
-            alert(data[0]);
-
+            var updateField = ['first_name', 'last_name', 'class', 'school', 'shift_day', 'shift_time', 'requirements_status'];
+            var updateTable = ['Users', 'Users', 'Users', 'Users', 'Program_Members', 'Program_Members', 'Program_Members'];
+            var whereClauseFields = ['eagle_id', 'eagle_id', 'eagle_id', 'eagle_id', 'user', 'user', 'user']
             
             $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
             $(".thVal").focus();
@@ -438,8 +450,22 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             if (event.keyCode == 13) {
                
                 data[column] =  document.getElementById("newvalue").value.trim();
-                table.row(row).remove().draw();
-                
+                table.row(row).remove();
+                $.post("../include/inlineUpdateTable.php",
+                {
+                    id : data[7],
+                    field : updateField[column],
+                    table : updateTable[column],
+                    newValue : data[column],
+                    whereField : whereClauseFields[column]
+                },
+              function(data){
+                if(data) {
+                  
+                }
+                });
+
+                setTimeout( function(){
                 table.row.add([
                     data[0],
                     data[1],
@@ -447,11 +473,13 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                     data[3],
                     data[4],
                     data[5],
-                    data[6]
+                    data[6],
+                    data[7]
 
                 ]).draw();
+            }, 100);
             }
-            });
+        });
             $('tbody td').not(currentEle).on('click', function() {
 
                 $(currentEle).html(value);
