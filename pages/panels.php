@@ -199,7 +199,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                 </li>
                                 
                                 <div class="col-xs-2">
-                                <select name="panel-semester" class="form-control form-control-xs" id="panel-semester" style="text-align: right;">
+                                <select name="table-semester" class="form-control form-control-xs" id="table-semester" style="text-align: right;">
                                         <?php
                                             $currMonth = date("n");
                                             $currSemester = "Fall";
@@ -224,7 +224,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                     </select>
                                 </div>
                                 <div class="col-xs-2">
-                                    <select name="panel-year" class="form-control form-control-xs" id="panel-year" style="text-align: right;">
+                                    <select name="table-year" class="form-control form-control-xs" id="table-year" style="text-align: right;">
                                         <?php
                                             $currYear = date("Y");
                                             $yearHolder = $currYear;
@@ -244,7 +244,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="volunteers">
-                                        <table class="table table-striped table-bordered table-hover" id="panels-volunteers" style="font-size: 13px; width: 100%;">
+                                        <table class="table table-striped table-bordered table-hover" id="table-volunteers" style="font-size: 13px; width: 100%;">
                                             <thead>
                                                 <tr>
                                                     <th>First Name</th>
@@ -268,7 +268,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                 </tr>
                                             </thead>
                                             
-                                            <tbody id="tablebody-vols">
+                                            <tbody id="tablebody-volunteers">
                                                 <?php 
                                                     function connect_to_db( $dbname ){
                                                         // REMEMBER!!!
@@ -299,7 +299,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     $query  = "select * from Program_Members, Users, Programs where user=eagle_id and program=program_id and program_name='Panels' and semester='$currSemester' and year='$currYear' order by last_name asc";
                                                     $result = perform_query( $dbc, $query );
                                                     while($row = mysqli_fetch_array( $result, MYSQLI_ASSOC )) {
-                                                        echo "<tr class = odd>";
+                                                        echo "<tr>";
                                                         echo "<td>".$row['first_name']."</td>";
                                                         echo "<td>".$row['last_name']."</td>";
                                                         echo "<td>".$row['class']."</td>";
@@ -360,7 +360,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <script>
     $(document).ready(function() {
     // Setup - add a text input to each footer cell
-        $('#panels-volunteers thead td').each( function () {
+        $('#table-volunteers thead td').each( function () {
             var title = $(this).text();
             $(this).css('text-align', 'center');
             $(this).html( '<input type="text"/>' );
@@ -368,7 +368,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         } );
      
         // DataTable
-        var table = $('#panels-volunteers').DataTable({
+        var table = $('#table-volunteers').DataTable({
             responsive: true,
             orderCellsTop: true,
             "columnDefs": [
@@ -382,7 +382,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
      
         // Apply the search
         table.columns().every(function (index) {
-        $('#panels-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
+        $('#table-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
             table.column($(this).parent().index() + ':visible')
                 .search(this.value)
                 .draw();
@@ -393,9 +393,9 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
 
         $('#tabs-list').on("click", "button", function() {
             
-            var s = document.getElementById("panel-semester");
+            var s = document.getElementById("table-semester");
             var selectedSemester = s.options[s.selectedIndex].value;
-            var y = document.getElementById("panel-year");
+            var y = document.getElementById("table-year");
             var selectedYear = y.options[y.selectedIndex].value;
             table.clear();
 
@@ -434,7 +434,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             
         });
         
-        $('#panels-volunteers tbody').on('dblclick', 'td', function(e) {
+        $('#table-volunteers tbody').on('dblclick', 'td', function(e) {
             var currentEle = $(this);
             var value = $(this).html();
             var row = table.cell($(this)).index().row;
