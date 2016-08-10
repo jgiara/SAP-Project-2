@@ -175,7 +175,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             <!-- /.navbar-static-side -->
         </nav>
 
-        <div id="page-wrapper">
+        <div id="page-wrapper" style="overflow-x: auto;">
             <div class="row" style="maring-bottom: 0;">
                 <div class="col-lg-12">
                     <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header" id="panels-header">Panels</h3>
@@ -244,7 +244,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane fade in active" id="volunteers">
-                                        <table class="table table-striped table-bordered table-hover" id="panels-volunteers" style="font-size: 13px;">
+                                        <table class="table table-striped table-bordered table-hover" id="panels-volunteers" style="font-size: 13px; width: 100%;">
                                             <thead>
                                                 <tr>
                                                     <th>First Name</th>
@@ -296,7 +296,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                         $currSemester = "Spring";
                                                     }
                                                     $dbc    = connect_to_db( "SAP" ); 
-                                                    $query  = "select * from Program_Members, Users, Programs where user=eagle_id and program=program_id and program_name='Panels' and semester='Spring' and year='$currYear' order by last_name asc";
+                                                    $query  = "select * from Program_Members, Users, Programs where user=eagle_id and program=program_id and program_name='Panels' and semester='$currSemester' and year='$currYear' order by last_name asc";
                                                     $result = perform_query( $dbc, $query );
                                                     while($row = mysqli_fetch_array( $result, MYSQLI_ASSOC )) {
                                                         echo "<tr class = odd>";
@@ -439,6 +439,9 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             var value = $(this).html();
             var row = table.cell($(this)).index().row;
             var column = table.cell($(this)).index().column;
+            if(column != 4 && column != 5 && column != 6) { //can't update User table
+                return;
+            }
             var data = table.row(row).data();
             var updateField = ['first_name', 'last_name', 'class', 'school', 'shift_day', 'shift_time', 'requirements_status'];
             var updateTable = ['Users', 'Users', 'Users', 'Users', 'Program_Members', 'Program_Members', 'Program_Members'];
@@ -483,7 +486,10 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             $('tbody td').not(currentEle).on('click', function() {
 
                 $(currentEle).html(value);
-            })  
+            });
+            $(currentEle).on("dblclick", function() {
+                $(currentEle).html(value);
+            });  
         });
         
     });
