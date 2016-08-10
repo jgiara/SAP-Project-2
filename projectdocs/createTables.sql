@@ -93,10 +93,24 @@ create table Attendance (
 	user int(8) not null references Users(eagle_id),
 	program int(10) not null references Programs(program_id),
 	present varchar(10) not null check(present in('Present', 'Excused', 'No Show')),
-	week int(2) not null,
+	week int(10) not null references Programming_Weeks(week_id),
 	note varchar(30), 
 	shift_day varchar(10) not null,
 	shift_time varchar(10) not null
+);
+
+create table Programming_Weeks (
+	week_id int(10) not null auto_increment primary key, 
+	week_number int(2) not null,
+	semester varchar(6) not null check(semester in('Fall', 'Spring')),
+	year int(4) not null, 
+	sunday_date varchar(10) not null,
+	monday_date varchar(10) not null,
+	tuesday_date varchar(10) not null,
+	wednesday_date varchar(10) not null,
+	thursday_date varchar(10) not null,
+	friday_date varchar(10) not null,
+	saturday_date varchar(10) not null
 );
 
 create table User_Audit (
