@@ -269,56 +269,40 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                             </thead>
                                             
                                             <tbody id="tablebody-volunteers">
-                                                <?php 
-                                                    function connect_to_db( $dbname ){
-                                                        // REMEMBER!!!
-                                                        // Change the host, login, and db information
-                                                        $dbc = @mysqli_connect( "localhost", "root", "root", $dbname ) or
-                                                                die( "Connect failed: ". mysqli_connect_error() );
-                                                        return $dbc;
-                                                    }
-
-                                                    function disconnect_from_db( $dbc, $result ){
-                                                        mysqli_free_result( $result );
-                                                        mysqli_close( $dbc );
-                                                    }
-
-                                                    function perform_query( $dbc, $query ){
-                                                        
-                                                        //echo "My query is >$query< <br />";
-                                                        $result = mysqli_query($dbc, $query) or 
-                                                                die( "bad query".mysqli_error( $dbc ) );
-                                                        return $result;
-                                                    }
-                                                    $currYear = date("Y");
-                                                    $currSemester = "Fall";
-                                                    if($currMonth < 6) {
-                                                        $currSemester = "Spring";
-                                                    }
-                                                    $dbc    = connect_to_db( "SAP" ); 
-                                                    $query  = "select * from Program_Members, Users, Programs where user=eagle_id and program=program_id and program_name='Panels' and semester='$currSemester' and year='$currYear' order by last_name asc";
-                                                    $result = perform_query( $dbc, $query );
-                                                    while($row = mysqli_fetch_array( $result, MYSQLI_ASSOC )) {
-                                                        echo "<tr>";
-                                                        echo "<td>".$row['first_name']."</td>";
-                                                        echo "<td>".$row['last_name']."</td>";
-                                                        echo "<td>".$row['class']."</td>";
-                                                        echo "<td>".$row['school']."</td>";
-                                                        echo "<td>".$row['shift_day']."</td>";
-                                                        echo "<td>".$row['shift_time']."</td>";
-                                                        echo "<td>".$row['requirements_status']."</td>";
-                                                        echo "<td>".$row['eagle_id']."</td>";
-                                                        echo "</tr>";
-                                                        
-                                                    }
-                                                    disconnect_from_db( $dbc, $result );
-                                                ?>
+                                                
                                             </tbody>
                                         </table>
                                     
                                 </div>
                                 <div class="tab-pane fade" id="attendance">
-                                    <h4>Profile Tab</h4>
+                                    <table class="table table-striped table-bordered table-hover" id="table-attendance" style="font-size: 13px; width: 100%;">
+                                            <thead>
+                                                <tr>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Shift Date</th>
+                                                    <th>Shift Day</th>
+                                                    <th>Shift Time</th>
+                                                    <th>Present</th>
+                                                    <th>Notes</th>
+                                                    <th>Eagle Id</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>First Name</td>
+                                                    <td>Last Name</td>
+                                                    <td>Shift Date</td>
+                                                    <td>Shift Day</td>
+                                                    <td>Shift Time</td>
+                                                    <td>Present</td>
+                                                    <td>Notes</td>
+                                                    <td>Eagle Id</td>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody id="tablebody-attendance">
+                                                
+                                            </tbody>
+                                        </table>
                                 </div>
                                 <div class="tab-pane fade" id="requirements">
                                     <h4>Messages Tab</h4>
@@ -368,7 +352,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         } );
      
         // DataTable
-        var table = $('#table-volunteers').DataTable({
+        var tableVols = $('#table-volunteers').DataTable({
             responsive: true,
             orderCellsTop: true,
             "columnDefs": [
@@ -379,39 +363,18 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 
             }]
         });
-     
-        // Apply the search
-        table.columns().every(function (index) {
-        $('#table-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
-            table.column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
-            } );
-        } );
-    
-    
-
-        $('#tabs-list').on("click", "button", function() {
-            
-            var s = document.getElementById("table-semester");
-            var selectedSemester = s.options[s.selectedIndex].value;
-            var y = document.getElementById("table-year");
-            var selectedYear = y.options[y.selectedIndex].value;
-            table.clear();
-
-           
-
-            //document.getElementById("panels-header").innerHTML = "HELLO";
-            
-            
-            $.getJSON("../include/getProgramVolunteers.php", 
+        var s = document.getElementById("table-semester");
+        var selectedSemester = s.options[s.selectedIndex].value;
+        var y = document.getElementById("table-year");
+        var selectedYear = y.options[y.selectedIndex].value;
+        $.getJSON("../include/getProgramVolunteers.php", 
             {
                 program: "Panels",
                 semester: selectedSemester,
                 year: selectedYear
             }, function(data) {
                 $.each(data, function(i, item) {
-                    table.row.add([
+                    tableVols.row.add([
                         item.first_name,
                         item.last_name,
                         item.class,
@@ -428,7 +391,116 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             });
 
             setTimeout(function() {
-            table.draw();
+            tableVols.draw();
+        }, 300);
+     
+        // Apply the search
+        tableVols.columns().every(function (index) {
+        $('#table-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
+            tableVols.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+            } );
+        } );
+    
+        $('#table-attendance thead td').each( function () {
+            var title = $(this).text();
+            $(this).css('text-align', 'center');
+            $(this).html( '<input type="text"/>' );
+            $(this).children('input').css('width', '100%');
+        } );
+     
+        // DataTable
+        var tableAttn = $('#table-attendance').DataTable({
+            responsive: true,
+            orderCellsTop: true,
+            "columnDefs": [
+            {
+                "targets": [7],
+                "visible": false,
+                "orderable": false
+                
+            }]
+        });
+        var s = document.getElementById("table-semester");
+        var selectedSemester = s.options[s.selectedIndex].value;
+        var y = document.getElementById("table-year");
+        var selectedYear = y.options[y.selectedIndex].value;
+        $.getJSON("../include/getProgramAttendance.php", 
+            {
+                program: "Panels",
+                semester: selectedSemester,
+                year: selectedYear
+            }, function(data) {
+                $.each(data, function(i, item) {
+                    tableAttn.row.add([
+                        item.first_name,
+                        item.last_name,
+                        item.week,
+                        item.shift_day,
+                        item.shift_time,
+                        item.present,
+                        item.note,
+                        item.eagle_id
+                    ]);
+                });
+            })
+            .fail(function() {
+                console.log("getJSON error");
+            });
+
+            setTimeout(function() {
+            tableVols.draw();
+        }, 300);
+     
+        // Apply the search
+        tableAttn.columns().every(function (index) {
+        $('#table-attendance thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
+            tableAttn.column($(this).parent().index() + ':visible')
+                .search(this.value)
+                .draw();
+            } );
+        } );
+
+        $('#tabs-list').on("click", "button", function() {
+            
+            var s = document.getElementById("table-semester");
+            var selectedSemester = s.options[s.selectedIndex].value;
+            var y = document.getElementById("table-year");
+            var selectedYear = y.options[y.selectedIndex].value;
+            tableVols.clear();
+            tableAttn.clear();
+
+           
+
+            //document.getElementById("panels-header").innerHTML = "HELLO";
+            
+            
+            $.getJSON("../include/getProgramVolunteers.php", 
+            {
+                program: "Panels",
+                semester: selectedSemester,
+                year: selectedYear
+            }, function(data) {
+                $.each(data, function(i, item) {
+                    tableVols.row.add([
+                        item.first_name,
+                        item.last_name,
+                        item.class,
+                        item.school,
+                        item.shift_day,
+                        item.shift_time,
+                        item.requirements_status,
+                        item.eagle_id
+                    ]);
+                });
+            })
+            .fail(function() {
+                console.log("getJSON error");
+            });
+
+            setTimeout(function() {
+            tableVols.draw();
         }, 300);
             
             
@@ -437,12 +509,12 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         $('#table-volunteers tbody').on('dblclick', 'td', function(e) {
             var currentEle = $(this);
             var value = $(this).html();
-            var row = table.cell($(this)).index().row;
-            var column = table.cell($(this)).index().column;
+            var row = tableVols.cell($(this)).index().row;
+            var column = tableVols.cell($(this)).index().column;
             if(column != 4 && column != 5 && column != 6) { //can't update User table
                 return;
             }
-            var data = table.row(row).data();
+            var data = tableVols.row(row).data();
             var updateField = ['first_name', 'last_name', 'class', 'school', 'shift_day', 'shift_time', 'requirements_status'];
             var updateTable = ['Users', 'Users', 'Users', 'Users', 'Program_Members', 'Program_Members', 'Program_Members'];
             var whereClauseFields = ['eagle_id', 'eagle_id', 'eagle_id', 'eagle_id', 'user', 'user', 'user']
@@ -453,7 +525,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             if (event.keyCode == 13) {
                
                 data[column] =  document.getElementById("newvalue").value.trim();
-                table.row(row).remove();
+                tableVols.row(row).remove();
                 $.post("../include/inlineUpdateTable.php",
                 {
                     id : data[7],
@@ -469,7 +541,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 });
 
                 setTimeout( function(){
-                table.row.add([
+                tableVols.row.add([
                     data[0],
                     data[1],
                     data[2],
