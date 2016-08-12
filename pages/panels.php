@@ -314,6 +314,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     <th>Present</th>
                                                     <th>Notes</th>
                                                     <th>Eagle Id</th>
+                                                    <th>Attendance Id</th>
                                                 </tr>
                                                 <tr>
                                                     <td>First Name</td>
@@ -323,6 +324,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                     <td>Present</td>
                                                     <td>Notes</td>
                                                     <td>Eagle Id</td>
+                                                    <td>Attendance Id</td>
                                                 </tr>
                                             </thead>
                                             
@@ -460,7 +462,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             orderCellsTop: true,
             "columnDefs": [
             {
-                "targets": [6],
+                "targets": [6,7],
                 "visible": false,
                 "orderable": false
                 
@@ -490,7 +492,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         item.shift_time,
                         item.present,
                         item.note,
-                        item.eagle_id
+                        item.eagle_id,
+                        item.attendance_id
                     ]);
                 });
             })
@@ -499,7 +502,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             });
 
             setTimeout(function() {
-            tableVols.draw();
+            tableAttn.draw();
         }, 300);
      
         // Apply the search
@@ -533,7 +536,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 year: selectedYear
             }, function(data) {
                 $.each(data, function(i, item) {
-                        document.getElementById("table-week").innerHTML = "<option value ='" + item.week_id + "'>Week " + item.week_number + "</option>"; 
+                        document.getElementById("table-week").innerHTML += "<option value ='" + item.week_id + "'>Week " + item.week_number + "</option>"; 
                 });
 
             })
@@ -589,7 +592,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         item.shift_time,
                         item.present,
                         item.note,
-                        item.eagle_id
+                        item.eagle_id,
+                        item.attendance_id
                     ]);
                 });
             })
@@ -615,8 +619,6 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             }
             var data = tableVols.row(row).data();
             var updateField = ['first_name', 'last_name', 'class', 'school', 'shift_day', 'shift_time', 'requirements_status'];
-            var updateTable = ['Users', 'Users', 'Users', 'Users', 'Program_Members', 'Program_Members', 'Program_Members'];
-            var whereClauseFields = ['eagle_id', 'eagle_id', 'eagle_id', 'eagle_id', 'user', 'user', 'user']
             
             $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
             $(".thVal").focus();
@@ -629,9 +631,9 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 {
                     id : data[7],
                     field : updateField[column],
-                    table : updateTable[column],
+                    table : 'Program_Members',
                     newValue : data[column],
-                    whereField : whereClauseFields[column]
+                    whereField : 'user'
                 },
               function(data){
                 if(data) {
@@ -641,6 +643,61 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
 
                 setTimeout( function(){
                 tableVols.row.add([
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[3],
+                    data[4],
+                    data[5],
+                    data[6],
+                    data[7]
+
+                ]).draw();
+            }, 100);
+            }
+        });
+            $('tbody td').not(currentEle).on('click', function() {
+
+                $(currentEle).html(value);
+            });
+            $(currentEle).on("dblclick", function() {
+                $(currentEle).html(value);
+            });  
+        });
+        $('#table-attendance tbody').on('dblclick', 'td', function(e) {
+            var currentEle = $(this);
+            var value = $(this).html();
+            var row = tableAttn.cell($(this)).index().row;
+            var column = tableAttn.cell($(this)).index().column;
+            if(column != 2 && column != 3 && column != 4 && column != 5) { //can't update User table
+                return;
+            }
+            var data = tableAttn.row(row).data();
+            var updateField = ['first_name', 'last_name', 'shift_day', 'shift_time', 'present', 'note'];
+            
+            $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
+            $(".thVal").focus();
+            $(".thVal").keyup(function (event) {
+            if (event.keyCode == 13) {
+               
+                data[column] =  document.getElementById("newvalue").value.trim();
+                tableAttn.row(row).remove();
+                $.post("../include/inlineUpdateTable.php",
+                {
+                    id : data[7],
+                    field : updateField[column],
+                    table : 'Attendance',
+                    newValue : data[column],
+                    whereField : 'attendance_id'
+                },
+              function(data){
+                if(data) {
+                  
+                }
+                });
+
+                setTimeout( function(){
+                tableAttn.row.add([
                     data[0],
                     data[1],
                     data[2],
