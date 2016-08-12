@@ -30,7 +30,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Panels - Student Admission Program - Boston College</title>
+    <title>Week Administration - Student Admission Program - Boston College</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -189,7 +189,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         <div id="page-wrapper" style="overflow-x: auto;">
             <div class="row" style="maring-bottom: 0;">
                 <div class="col-lg-12">
-                    <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header" id="panels-header">Panels</h3>
+                    <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header" id="panels-header">Week Administration</h3>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -201,13 +201,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         <div class="panel-body">
                             <!-- Nav tabs -->
 
-                            <ul id="tabs-list" class="nav nav-tabs">
-                                <li class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
-                                </li>
-                                <li><a href="#attendance" data-toggle="tab">Attendance</a>
-                                </li>
-                                <li><a href="#requirements" data-toggle="tab">Requirements</a>
-                                </li>
+                            
                                 
                                 <div class="col-xs-2">
                                 <select name="table-semester" class="form-control form-control-xs" id="table-semester" style="text-align: right;">
@@ -250,75 +244,41 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
 
                                 </div>
                                 <button class="btn btn-primary" id="semester-submit">Go</button>
-                            </ul>
+                                <button class="btn btn-md btn-success" id="openModalButton" style="margin-left: 10px;" data-toggle="modal" data-target="#addWeekModal">Add New Week</button>
+                            </br></br>
 
                             <!-- Tab panes -->
-                            <div class="tab-content">
-                                <div class="tab-pane fade in active" id="volunteers">
-                                        <table class="table table-striped table-bordered table-hover" id="table-volunteers" style="font-size: 13px; width: 100%;">
+                            
+                                        <table class="table table-striped table-bordered table-hover" id="table-weeks" style="font-size: 13px; width: 100%;">
                                             <thead>
                                                 <tr>
-                                                    <th>First Name</th>
-                                                    <th>Last Name</th>
-                                                    <th>Class</th>
-                                                    <th>School</th>
-                                                    <th>Shift Day</th>
-                                                    <th>Shift Time</th>
-                                                    <th>Requirements</th>
-                                                    <th>Eagle Id</th>
+                                                    <th>Week</th>
+                                                    <th>Sunday</th>
+                                                    <th>Monday</th>
+                                                    <th>Tuesday</th>
+                                                    <th>Wednesday</th>
+                                                    <th>Thursday</th>
+                                                    <th>Friday</th>
+                                                    <th>Saturday</th>
                                                 </tr>
                                                 <tr>
-                                                    <td>First Name</td>
-                                                    <td>Last Name</td>
-                                                    <td>Class</td>
-                                                    <td>School</td>
-                                                    <td>Shift Day</td>
-                                                    <td>Shift Time</td>
-                                                    <td>Requirements</td>
-                                                    <td>Eagle Id</td>
+                                                    <td>Week</td>
+                                                    <td>Sunday</td>
+                                                    <td>Monday</td>
+                                                    <td>Tuesday</td>
+                                                    <td>Wednesday</td>
+                                                    <td>Thursday</td>
+                                                    <td>Friday</td>
+                                                    <td>Saturday</td>
                                                 </tr>
                                             </thead>
                                             
-                                            <tbody id="tablebody-volunteers">
+                                            <tbody id="tablebody-weeks">
                                                 
                                             </tbody>
                                         </table>
                                     
-                                </div>
-                                <div class="tab-pane fade" id="attendance">
-                                    <table class="table table-striped table-bordered table-hover" id="table-attendance" style="font-size: 13px; width: 100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th>First Name</th>
-                                                    <th>Last Name</th>
-                                                    <th>Shift Date</th>
-                                                    <th>Shift Day</th>
-                                                    <th>Shift Time</th>
-                                                    <th>Present</th>
-                                                    <th>Notes</th>
-                                                    <th>Eagle Id</th>
-                                                </tr>
-                                                <tr>
-                                                    <td>First Name</td>
-                                                    <td>Last Name</td>
-                                                    <td>Shift Date</td>
-                                                    <td>Shift Day</td>
-                                                    <td>Shift Time</td>
-                                                    <td>Present</td>
-                                                    <td>Notes</td>
-                                                    <td>Eagle Id</td>
-                                                </tr>
-                                            </thead>
-                                            
-                                            <tbody id="tablebody-attendance">
-                                                
-                                            </tbody>
-                                        </table>
-                                </div>
-                                <div class="tab-pane fade" id="requirements">
-                                    <h4>Messages Tab</h4>
-                                </div>
-                            </div>
+                                
                         </div>
                         <!-- /.panel-body -->
                     
@@ -331,6 +291,68 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
 
     </div>
     <!-- /#wrapper -->
+
+     <!-- MODAL FOR Registration -->
+        <div id="addWeekModal" class="modal fade" role="dialog">
+              <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add New Week</h4>
+                  </div>
+                  <div class="modal-body">
+                    <form method="POST" id="addWeekForm" name="addWeekForm">
+                    <div class="form-group">
+                        <label for="semester-form">Semester:</label>
+                        <input type="text" name="semester-form" class="form-control" id="semester-form" readonly required>
+                    </div>    
+                    <div class="form-group">
+                        <label for="year-form">Year:</label>
+                        <input type="text" name="year-form" class="form-control" id="year-form" readonly required>
+                    </div>    
+                    <div class="form-group">
+                        <label for="eagleid">Week Number:</label>
+                        <input type="number" name="week-number" class="form-control" id="week-number" placeholder="Week Number" required>
+                    </div>    
+                    <div class="form-group">
+                        <label for="sunday">Sunday Date:</label>
+                        <input type="date" name="sunday-date" class="form-control" id="sunday-date" placeholder="Sunday Date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="moday-date">Monday Date:</label>
+                        <input type="date" name="monday-date" class="form-control" id="monday-date" placeholder="Monday Date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tuesday-date">Tuesday Date:</label>
+                        <input type="date" name="tuesday-date" class="form-control" id="tuesday-date" placeholder="Tuesday Date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wednesday-date">Wednesday Date:</label>
+                        <input type="date" name="wednesday-date" class="form-control" id="wednesday-date" placeholder="Wednesday Date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="thursday-date">Thursday Date:</label>
+                        <input type="date" name="thursday-date" class="form-control" id="thursday-date" placeholder="Thursday Date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="friday-date">Friday Date:</label>
+                        <input type="date" name="friday-date" class="form-control" id="friday-date" placeholder="Friday Date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="saturday-date">Saturday Date:</label>
+                        <input type="date" name="saturday-date" class="form-control" id="saturday-date" placeholder="Saturday Date" required>
+                    </div>
+                    <input type="submit" name="submit" id="modalFormSubmit" value="Add Week" class="btn btn-default"></input>
+                    </form>
+                  </div>
+                <div class="modal-footer">
+                    <button type="button" id="submitWeek" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                </div>
+              </div>
+            </div>
+            <!--end MODAL -->
 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
@@ -355,7 +377,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <script>
     $(document).ready(function() {
     // Setup - add a text input to each footer cell
-        $('#table-volunteers thead td').each( function () {
+        $('#table-weeks thead td').each( function () {
             var title = $(this).text();
             $(this).css('text-align', 'center');
             $(this).html( '<input type="text"/>' );
@@ -363,37 +385,38 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         } );
      
         // DataTable
-        var tableVols = $('#table-volunteers').DataTable({
+        var tableWeek = $('#table-weeks').DataTable({
             responsive: true,
             orderCellsTop: true,
             "columnDefs": [
             {
-                "targets": [7],
+                "targets": [8],
                 "visible": false,
                 "orderable": false
                 
             }]
+            
         });
         var s = document.getElementById("table-semester");
         var selectedSemester = s.options[s.selectedIndex].value;
         var y = document.getElementById("table-year");
         var selectedYear = y.options[y.selectedIndex].value;
-        $.getJSON("../include/getProgramVolunteers.php", 
+        $.getJSON("../include/getWeek.php", 
             {
-                program: "Panels",
                 semester: selectedSemester,
                 year: selectedYear
             }, function(data) {
                 $.each(data, function(i, item) {
-                    tableVols.row.add([
-                        item.first_name,
-                        item.last_name,
-                        item.class,
-                        item.school,
-                        item.shift_day,
-                        item.shift_time,
-                        item.requirements_status,
-                        item.eagle_id
+                    tableWeek.row.add([
+                        item.week_number,
+                        item.sunday_date,
+                        item.monday_date,
+                        item.tuesday_date,
+                        item.wednesday_date,
+                        item.thursday_date,
+                        item.friday_date,
+                        item.saturday_date,
+                        item.week_id
                     ]);
                 });
             })
@@ -402,107 +425,47 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             });
 
             setTimeout(function() {
-            tableVols.draw();
+            tableWeek.draw();
         }, 300);
      
         // Apply the search
-        tableVols.columns().every(function (index) {
-        $('#table-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
-            tableVols.column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
-            } );
-        } );
-    
-        $('#table-attendance thead td').each( function () {
-            var title = $(this).text();
-            $(this).css('text-align', 'center');
-            $(this).html( '<input type="text"/>' );
-            $(this).children('input').css('width', '100%');
-        } );
-     
-        // DataTable
-        var tableAttn = $('#table-attendance').DataTable({
-            responsive: true,
-            orderCellsTop: true,
-            "columnDefs": [
-            {
-                "targets": [7],
-                "visible": false,
-                "orderable": false
-                
-            }]
-        });
-        var s = document.getElementById("table-semester");
-        var selectedSemester = s.options[s.selectedIndex].value;
-        var y = document.getElementById("table-year");
-        var selectedYear = y.options[y.selectedIndex].value;
-        $.getJSON("../include/getProgramAttendance.php", 
-            {
-                program: "Panels",
-                semester: selectedSemester,
-                year: selectedYear
-            }, function(data) {
-                $.each(data, function(i, item) {
-                    tableAttn.row.add([
-                        item.first_name,
-                        item.last_name,
-                        item.week,
-                        item.shift_day,
-                        item.shift_time,
-                        item.present,
-                        item.note,
-                        item.eagle_id
-                    ]);
-                });
-            })
-            .fail(function() {
-                console.log("getJSON error");
-            });
-
-            setTimeout(function() {
-            tableVols.draw();
-        }, 300);
-     
-        // Apply the search
-        tableAttn.columns().every(function (index) {
-        $('#table-attendance thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
-            tableAttn.column($(this).parent().index() + ':visible')
+        tableWeek.columns().every(function (index) {
+        $('#table-weeks thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
+            tableWeek.column($(this).parent().index() + ':visible')
                 .search(this.value)
                 .draw();
             } );
         } );
 
-        $('#tabs-list').on("click", "button", function() {
+        $('#semester-submit').on("click", function() {
             
             var s = document.getElementById("table-semester");
             var selectedSemester = s.options[s.selectedIndex].value;
             var y = document.getElementById("table-year");
             var selectedYear = y.options[y.selectedIndex].value;
-            tableVols.clear();
-            tableAttn.clear();
+            tableWeek.clear();
 
            
 
             //document.getElementById("panels-header").innerHTML = "HELLO";
             
             
-            $.getJSON("../include/getProgramVolunteers.php", 
+            $.getJSON("../include/getWeek.php", 
             {
-                program: "Panels",
                 semester: selectedSemester,
                 year: selectedYear
             }, function(data) {
                 $.each(data, function(i, item) {
-                    tableVols.row.add([
-                        item.first_name,
-                        item.last_name,
-                        item.class,
-                        item.school,
-                        item.shift_day,
-                        item.shift_time,
-                        item.requirements_status,
-                        item.eagle_id
+                    tableWeek.row.add([
+                        item.week_number,
+                        item.sunday_date,
+                        item.monday_date,
+                        item.tuesday_date,
+                        item.wednesday_date,
+                        item.thursday_date,
+                        item.friday_date,
+                        item.saturday_date,
+                        item.week_id
                     ]);
                 });
             })
@@ -511,24 +474,20 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             });
 
             setTimeout(function() {
-            tableVols.draw();
+            tableWeek.draw();
         }, 300);
             
             
         });
         
-        $('#table-volunteers tbody').on('dblclick', 'td', function(e) {
+        $('#table-weeks tbody').on('dblclick', 'td', function(e) {
             var currentEle = $(this);
             var value = $(this).html();
-            var row = tableVols.cell($(this)).index().row;
-            var column = tableVols.cell($(this)).index().column;
-            if(column != 4 && column != 5 && column != 6) { //can't update User table
-                return;
-            }
-            var data = tableVols.row(row).data();
-            var updateField = ['first_name', 'last_name', 'class', 'school', 'shift_day', 'shift_time', 'requirements_status'];
-            var updateTable = ['Users', 'Users', 'Users', 'Users', 'Program_Members', 'Program_Members', 'Program_Members'];
-            var whereClauseFields = ['eagle_id', 'eagle_id', 'eagle_id', 'eagle_id', 'user', 'user', 'user']
+            var row = tableWeek.cell($(this)).index().row;
+            var column = tableWeek.cell($(this)).index().column;
+            
+            var data = tableWeek.row(row).data();
+            var updateField = ['week_number', 'sunday_date', 'monday_date', 'tuesday_date', 'wednesday_date', 'thursday_date', 'friday_date', 'saturday_date'];
             
             $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
             $(".thVal").focus();
@@ -536,14 +495,12 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             if (event.keyCode == 13) {
                
                 data[column] =  document.getElementById("newvalue").value.trim();
-                tableVols.row(row).remove();
-                $.post("../include/inlineUpdateTable.php",
+                tableWeek.row(row).remove();
+                $.post("../include/inlineUpdateWeek.php",
                 {
-                    id : data[7],
+                    id : data[8],
                     field : updateField[column],
-                    table : updateTable[column],
-                    newValue : data[column],
-                    whereField : whereClauseFields[column]
+                    newValue : data[column]
                 },
               function(data){
                 if(data) {
@@ -552,7 +509,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 });
 
                 setTimeout( function(){
-                tableVols.row.add([
+                tableWeek.row.add([
                     data[0],
                     data[1],
                     data[2],
@@ -560,7 +517,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                     data[4],
                     data[5],
                     data[6],
-                    data[7]
+                    data[7],
+                    data[8]
 
                 ]).draw();
             }, 100);
@@ -574,7 +532,46 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 $(currentEle).html(value);
             });  
         });
-        
+
+        $("#openModalButton").on("click", function() {
+            var s = document.getElementById("table-semester");
+            var selectedSemester = s.options[s.selectedIndex].value;
+            var y = document.getElementById("table-year");
+            var selectedYear = y.options[y.selectedIndex].value;
+            document.getElementById("year-form").value = selectedYear;
+            document.getElementById("semester-form").value = selectedSemester;
+        });
+
+        $("#addWeekForm").on("submit", function(e) {
+            var formWeek = document.getElementById("week-number").value;
+            var formYear = document.getElementById("year-form").value;
+            var formSemester = document.getElementById("semester-form").value;
+            var formSun = document.getElementById("sunday-date").value;
+            var formMon = document.getElementById("monday-date").value;
+            var formTues = document.getElementById("tuesday-date").value;
+            var formWed = document.getElementById("wednesday-date").value;
+            var formThurs = document.getElementById("thursday-date").value;
+            var formFri = document.getElementById("friday-date").value;
+            var formSat = document.getElementById("saturday-date").value;
+            $.post("../include/insertProgrammingWeek.php",
+                {
+                    week : formWeek,
+                    year : formYear,
+                    semester : formSemester,
+                    sun : formSun,
+                    mon : formMon,
+                    tues : formTues,
+                    wed : formWed,
+                    thurs : formThurs,
+                    fri : formFri,
+                    sat : formSat
+                },
+              function(data){
+                if(data) {
+                  
+                }
+            });
+        });
     });
     </script>
 

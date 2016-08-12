@@ -165,6 +165,17 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                     </li>
                                     <li>
                                         <a href='./summer.php'>Summer</a>
+                                    </li>
+                                    <li>
+                                        <a href='#'>Administration<span class='fa arrow'></span></a>
+                                        <ul class='nav nav-second-level'>
+                                            <li>
+                                                <a href='./weeks.php'>Weeks</a>
+                                            </li>
+                                            <li>
+                                                <a href='./reports.php'>Reports</a>
+                                            </li>
+                                        </ul>
                                     </li>";
                             }
                             ?>
