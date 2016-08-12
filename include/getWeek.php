@@ -5,7 +5,7 @@
 
 	$dbc = @mysqli_connect("localhost", "root", "root", "SAP")
 	    or die("Could not open SAP db, " . mysqli_connect_error());
-	$query = "select * from Programming_Weeks where semester='$semester' and year='$year'";			
+	$query = "select * from Programming_Weeks where semester='$semester' and year='$year' order by week_number desc";			
 	$result = mysqli_query($dbc, $query) or die ("Error in Select" . mysqli_error($dbc));
 		
 	$items = array();	// put the rows as objects in an array

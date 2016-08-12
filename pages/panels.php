@@ -202,12 +202,11 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                             <!-- Nav tabs -->
 
                             <ul id="tabs-list" class="nav nav-tabs">
-                                <li class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
+                                <li id="volunteers-tab" class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
                                 </li>
-                                <li><a href="#attendance" data-toggle="tab">Attendance</a>
+                                <li id="attendance-tab"><a href="#attendance" data-toggle="tab">Attendance</a>
                                 </li>
-                                <li><a href="#requirements" data-toggle="tab">Requirements</a>
-                                </li>
+                                
                                 
                                 <div class="col-xs-2">
                                 <select name="table-semester" class="form-control form-control-xs" id="table-semester" style="text-align: right;">
@@ -246,6 +245,25 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                 $yearHolder--;
                                             }
                                         ?>
+                                    </select>
+
+                                </div>
+                                <div class="col-xs-2">
+                                    <select name="table-week" class="form-control form-control-xs" id="table-week" style="text-align: right;">
+                                      
+                                    </select>
+
+                                </div>
+                                <div class="col-xs-2">
+                                    <select name="table-day" class="form-control form-control-xs" id="table-day" style="text-align: right;">
+                                        <option value="Sunday" <?php $day = date("w"); if($day == 0){ echo "selected='selected'";}?> >Sunday</option>
+                                        <option value="Monday" <?php $day = date("w"); if($day == 1) {echo "selected='selected'";}?> >Monday</option>
+                                        <option value="Tuesday" <?php $day = date("w"); if($day == 2) {echo "selected='selected'";}?> >Tuesday</option>
+                                        <option value="Wednesday" <?php $day = date("w"); if($day == 3) {echo "selected='selected'";}?> >Wednesday</option>
+                                        <option value="Thursday" <?php $day = date("w"); if($day == 4) {echo "selected='selected'";}?> >Thursday</option>
+                                        <option value="Friday" <?php $day = date("w"); if($day == 5) {echo "selected='selected'";}?> >Friday</option>
+                                        <option value="Saturday" <?php $day = date("w"); if($day == 6) {echo "selected='selected'";}?> >Saturday</option>
+
                                     </select>
 
                                 </div>
@@ -291,7 +309,6 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                 <tr>
                                                     <th>First Name</th>
                                                     <th>Last Name</th>
-                                                    <th>Shift Date</th>
                                                     <th>Shift Day</th>
                                                     <th>Shift Time</th>
                                                     <th>Present</th>
@@ -301,7 +318,6 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                                 <tr>
                                                     <td>First Name</td>
                                                     <td>Last Name</td>
-                                                    <td>Shift Date</td>
                                                     <td>Shift Day</td>
                                                     <td>Shift Time</td>
                                                     <td>Present</td>
@@ -315,9 +331,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                                             </tbody>
                                         </table>
                                 </div>
-                                <div class="tab-pane fade" id="requirements">
-                                    <h4>Messages Tab</h4>
-                                </div>
+                                
                             </div>
                         </div>
                         <!-- /.panel-body -->
@@ -354,7 +368,26 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     
     <script>
     $(document).ready(function() {
+        var s = document.getElementById("table-semester");
+        var selectedSemester = s.options[s.selectedIndex].value;
+        var y = document.getElementById("table-year");
+        var selectedYear = y.options[y.selectedIndex].value;
+        $.getJSON("../include/getWeek.php", 
+            {
+                semester: selectedSemester,
+                year: selectedYear
+            }, function(data) {
+                $.each(data, function(i, item) {
+                        document.getElementById("table-week").innerHTML += "<option value ='" + item.week_id + "'>Week " + item.week_number + "</option>"; 
+                });
+
+            })
+            .fail(function() {
+                console.log("getJSON error");
+            });
+        hideSelects();
     // Setup - add a text input to each footer cell
+    setTimeout(function() {
         $('#table-volunteers thead td').each( function () {
             var title = $(this).text();
             $(this).css('text-align', 'center');
@@ -427,7 +460,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             orderCellsTop: true,
             "columnDefs": [
             {
-                "targets": [7],
+                "targets": [6],
                 "visible": false,
                 "orderable": false
                 
@@ -437,17 +470,22 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         var selectedSemester = s.options[s.selectedIndex].value;
         var y = document.getElementById("table-year");
         var selectedYear = y.options[y.selectedIndex].value;
+        var w = document.getElementById("table-week");
+        var selectedWeek = w.options[w.selectedIndex].value;
+        var d = document.getElementById("table-day");
+        var selectedDay = d.options[d.selectedIndex].value;
         $.getJSON("../include/getProgramAttendance.php", 
             {
                 program: "Panels",
                 semester: selectedSemester,
-                year: selectedYear
+                year: selectedYear,
+                week: selectedWeek,
+                day: selectedDay
             }, function(data) {
                 $.each(data, function(i, item) {
                     tableAttn.row.add([
                         item.first_name,
                         item.last_name,
-                        item.week,
                         item.shift_day,
                         item.shift_time,
                         item.present,
@@ -473,14 +511,35 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             } );
         } );
 
+
         $('#tabs-list').on("click", "button", function() {
             
             var s = document.getElementById("table-semester");
             var selectedSemester = s.options[s.selectedIndex].value;
             var y = document.getElementById("table-year");
             var selectedYear = y.options[y.selectedIndex].value;
+            var w = document.getElementById("table-week");
+            var selectedWeek = w.options[w.selectedIndex].value;
+            var d = document.getElementById("table-day");
+            var selectedDay = d.options[d.selectedIndex].value;
+            
             tableVols.clear();
             tableAttn.clear();
+
+            document.getElementById("table-week").innerHTML = "";
+            $.getJSON("../include/getWeek.php", 
+            {
+                semester: selectedSemester,
+                year: selectedYear
+            }, function(data) {
+                $.each(data, function(i, item) {
+                        document.getElementById("table-week").innerHTML = "<option value ='" + item.week_id + "'>Week " + item.week_number + "</option>"; 
+                });
+
+            })
+            .fail(function() {
+                console.log("getJSON error");
+            });
 
            
 
@@ -513,6 +572,35 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             setTimeout(function() {
             tableVols.draw();
         }, 300);
+
+            $.getJSON("../include/getProgramAttendance.php", 
+            {
+                program: "Panels",
+                semester: selectedSemester,
+                year: selectedYear, 
+                week: selectedWeek,
+                day: selectedDay
+            }, function(data) {
+                $.each(data, function(i, item) {
+                    tableAttn.row.add([
+                        item.first_name,
+                        item.last_name,
+                        item.shift_day,
+                        item.shift_time,
+                        item.present,
+                        item.note,
+                        item.eagle_id
+                    ]);
+                });
+            })
+            .fail(function() {
+                console.log("getJSON error");
+            });
+
+            setTimeout(function() {
+            tableAttn.draw();
+        }, 300);
+
             
             
         });
@@ -574,8 +662,27 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 $(currentEle).html(value);
             });  
         });
-        
+        });
+        $("#attendance-tab").on("click", function() {
+            showSelects();
+        });
+        $("#volunteers-tab").on("click", function() {
+            hideSelects();
+        });
     });
+    function hideSelects(){
+        var weekSelect = document.getElementById("table-week");
+        var daySelect = document.getElementById("table-day")
+        weekSelect.style.visibility = 'hidden';
+        daySelect.style.visibility = 'hidden';
+    }
+
+    function showSelects(){
+        var weekSelect = document.getElementById("table-week");
+        var daySelect = document.getElementById("table-day")
+        weekSelect.style.visibility = 'visible';
+        daySelect.style.visibility = 'visible';
+    }
     </script>
 
 </body>
