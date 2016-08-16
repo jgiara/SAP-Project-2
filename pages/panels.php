@@ -201,15 +201,7 @@ date_default_timezone_set('EST');
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <!-- Nav tabs -->
-
-                            <ul id="tabs-list" class="nav nav-tabs">
-                                <li id="volunteers-tab" class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
-                                </li>
-                                <li id="attendance-tab"><a href="#attendance" data-toggle="tab">Attendance</a>
-                                </li>
-                                
-                                
-                                <div class="col-xs-2">
+                            <div class="col-xs-2">
                                 <select name="table-semester" class="form-control form-control-xs" id="table-semester" style="text-align: right;">
                                         <?php
                                             $currMonth = date("n");
@@ -249,7 +241,7 @@ date_default_timezone_set('EST');
                                     </select>
 
                                 </div>
-                                <div class="col-xs-2">
+                                <div class="col-xs-3">
                                     <select name="table-week" class="form-control form-control-xs" id="table-week" style="text-align: right;">
                                       
                                     </select>
@@ -269,6 +261,15 @@ date_default_timezone_set('EST');
 
                                 </div>
                                 <button class="btn btn-primary" id="semester-submit">Go</button>
+
+                            <ul id="tabs-list" class="nav nav-tabs" style="margin-top: 10px;">
+                                <li id="volunteers-tab" class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
+                                </li>
+                                <li id="attendance-tab"><a href="#attendance" data-toggle="tab">Attendance</a>
+                                </li>
+                                
+                                
+                                
                             </ul>
 
                             <!-- Tab panes -->
@@ -381,7 +382,7 @@ date_default_timezone_set('EST');
                 year: selectedYear
             }, function(data) {
                 $.each(data, function(i, item) {
-                        document.getElementById("table-week").innerHTML += "<option value ='" + item.week_id + "'>Week " + item.week_number + "</option>"; 
+                        document.getElementById("table-week").innerHTML += "<option value ='" + item.week_id + "'>Week " + item.week_number + ": " + item.sunday_date.substring(5) + " - " + item.saturday_date.substring(5) + "</option>"; 
                 });
 
             })
@@ -517,7 +518,7 @@ date_default_timezone_set('EST');
         } );
 
 
-        $('#tabs-list').on("click", "button", function() {
+        $('#semester-submit').on("click", function() {
             
             var s = document.getElementById("table-semester");
             var selectedSemester = s.options[s.selectedIndex].value;
@@ -538,7 +539,7 @@ date_default_timezone_set('EST');
                 year: selectedYear
             }, function(data) {
                 $.each(data, function(i, item) {
-                        document.getElementById("table-week").innerHTML += "<option value ='" + item.week_id + "'>Week " + item.week_number + "</option>"; 
+                         document.getElementById("table-week").innerHTML += "<option value ='" + item.week_id + "'>Week " + item.week_number + ": " + item.sunday_date.substring(5) + " - " + item.saturday_date.substring(5) + "</option>"; 
                 });
 
             })
