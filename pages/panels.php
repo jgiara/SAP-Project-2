@@ -261,6 +261,7 @@ date_default_timezone_set('EST');
 
                                 </div>
                                 <button class="btn btn-primary" id="semester-submit">Go</button>
+                                <button class="btn btn-success" id="newAttendance" style="margin-left: 10px;">New Attendance</button>
 
                             <ul id="tabs-list" class="nav nav-tabs" style="margin-top: 10px;">
                                 <li id="volunteers-tab" class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
@@ -731,16 +732,20 @@ date_default_timezone_set('EST');
     });
     function hideSelects(){
         var weekSelect = document.getElementById("table-week");
-        var daySelect = document.getElementById("table-day")
+        var daySelect = document.getElementById("table-day");
+        var newAttnButton = document.getElementById("newAttendance");
         weekSelect.style.visibility = 'hidden';
         daySelect.style.visibility = 'hidden';
+        newAttendance.style.visibility = 'hidden';
     }
 
     function showSelects(){
         var weekSelect = document.getElementById("table-week");
-        var daySelect = document.getElementById("table-day")
+        var daySelect = document.getElementById("table-day");
+        var newAttnButton = document.getElementById("newAttendance");
         weekSelect.style.visibility = 'visible';
         daySelect.style.visibility = 'visible';
+        newAttendance.style.visibility = 'visible';
     }
     </script>
 
