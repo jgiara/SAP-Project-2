@@ -389,7 +389,6 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             });
         hideSelects();
     // Setup - add a text input to each footer cell
-    setTimeout(function() {
         $('#table-volunteers thead td').each( function () {
             var title = $(this).text();
             $(this).css('text-align', 'center');
@@ -468,12 +467,13 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 
             }]
         });
+        setTimeout(function() {
         var s = document.getElementById("table-semester");
         var selectedSemester = s.options[s.selectedIndex].value;
         var y = document.getElementById("table-year");
         var selectedYear = y.options[y.selectedIndex].value;
         var w = document.getElementById("table-week");
-        var selectedWeek = w.options[w.selectedIndex].value;
+        var selectedWeek = w.options[w.selectedIndex].value; //sometimes has an undefined value
         var d = document.getElementById("table-day");
         var selectedDay = d.options[d.selectedIndex].value;
         $.getJSON("../include/getProgramAttendance.php", 
@@ -504,6 +504,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             setTimeout(function() {
             tableAttn.draw();
         }, 300);
+        }, 200);
      
         // Apply the search
         tableAttn.columns().every(function (index) {
@@ -605,13 +606,11 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             tableAttn.draw();
         }, 300);
 
-            
-            
-        });
         
         $('#table-volunteers tbody').on('dblclick', 'td', function(e) {
             var currentEle = $(this);
-            var value = $(this).html();
+            var valueT = $(this).html();
+            document.getElementById("panels-header").innerHTML += "-" + valueT;
             var row = tableVols.cell($(this)).index().row;
             var column = tableVols.cell($(this)).index().column;
             if(column != 4 && column != 5 && column != 6) { //can't update User table
@@ -619,8 +618,8 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             }
             var data = tableVols.row(row).data();
             var updateField = ['first_name', 'last_name', 'class', 'school', 'shift_day', 'shift_time', 'requirements_status'];
-            
-            $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
+            setTimeout(function() {
+            $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + valueT + '" />');
             $(".thVal").focus();
             $(".thVal").keyup(function (event) {
             if (event.keyCode == 13) {
@@ -656,12 +655,13 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             }, 100);
             }
         });
+        },50);
             $('tbody td').not(currentEle).on('click', function() {
 
-                $(currentEle).html(value);
+                $(currentEle).html(valueT);
             });
             $(currentEle).on("dblclick", function() {
-                $(currentEle).html(value);
+                $(currentEle).html(valueT);
             });  
         });
         $('#table-attendance tbody').on('dblclick', 'td', function(e) {
@@ -674,7 +674,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             }
             var data = tableAttn.row(row).data();
             var updateField = ['first_name', 'last_name', 'shift_day', 'shift_time', 'present', 'note'];
-            
+            setTimeout(function(){
             $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
             $(".thVal").focus();
             $(".thVal").keyup(function (event) {
@@ -711,6 +711,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             }, 100);
             }
         });
+        },50);
             $('tbody td').not(currentEle).on('click', function() {
 
                 $(currentEle).html(value);
