@@ -16,6 +16,7 @@ foreach($groups as $group) {
 }
 
 echo "<input type='hidden' id='userid' value='$eagleid'/>";
+date_default_timezone_set('EST');
 
 ?>
 
@@ -610,7 +611,6 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         $('#table-volunteers tbody').on('dblclick', 'td', function(e) {
             var currentEle = $(this);
             var valueT = $(this).html();
-            document.getElementById("panels-header").innerHTML += "-" + valueT;
             var row = tableVols.cell($(this)).index().row;
             var column = tableVols.cell($(this)).index().column;
             if(column != 4 && column != 5 && column != 6) { //can't update User table
