@@ -16,6 +16,7 @@ foreach($groups as $group) {
 }
 
 echo "<input type='hidden' id='userid' value='$eagleid'/>";
+date_default_timezone_set('EST');
 
 ?>
 
@@ -30,7 +31,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Week Administration - Student Admission Program - Boston College</title>
+    <title>All Users - Student Admission Program - Boston College</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -192,7 +193,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         <div id="page-wrapper" style="overflow-x: auto;">
             <div class="row" style="maring-bottom: 0;">
                 <div class="col-lg-12">
-                    <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header" id="panels-header">Week Administration</h3>
+                    <h3 style="margin-top: 60px; margin-bottom: 0;" class="page-header" id="users-header">All Users</h3>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -203,85 +204,56 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <!-- Nav tabs -->
-
-                            
-                                
                                 <div class="col-xs-2">
-                                <select name="table-semester" class="form-control form-control-xs" id="table-semester" style="text-align: right;">
-                                        <?php
-                                            $currMonth = date("n");
-                                            $currSemester = "Fall";
-                                            if($currMonth < 6) {
-                                                $currSemester = "Spring";
-                                            }
-                                            echo "<option value='Fall'";
-                                            if($currSemester == "Fall") {
-                                                echo "selected='selected'>Fall</option>";
-                                            }
-                                            else {
-                                                echo ">Fall</option>";
-                                            }
-                                            echo "<option value='Spring'";
-                                            if($currSemester == "Spring") {
-                                                echo "selected='selected'>Spring</option>";
-                                            }
-                                            else {
-                                                echo ">Spring</option>";
-                                            }
-                                        ?>
+                                    <select name="table-active" class="form-control form-control-xs" id="table-active" style="text-align: right;">
+                                        <option value='Yes'>Active</option>
+                                        <option value='No'>Inactive</option>
+                                        <option value="Abroad">Abroad</option>
+                                        <option value='Prac/Clinical'>Prac/Clinical</option>
+                                        <option value="Graduated">Graduated</option>
                                     </select>
-                                </div>
-                                <div class="col-xs-2">
-                                    <select name="table-year" class="form-control form-control-xs" id="table-year" style="text-align: right;">
-                                        <?php
-                                            $currYear = date("Y");
-                                            $yearHolder = $currYear;
-                                            echo "<option value='".$yearHolder."' selected='selected'>".$yearHolder."</option>";
-                                            $yearHolder--;
-                                            while($yearHolder >= 2015) {
-                                                echo "<option value='".$yearHolder."'>".$yearHolder."</option>";
-                                                $yearHolder--;
-                                            }
-                                        ?>
-                                    </select>
-
                                 </div>
                                 <button class="btn btn-primary" id="semester-submit">Go</button>
-                                <button class="btn btn-md btn-success" id="openModalButton" style="margin-left: 10px;" data-toggle="modal" data-target="#addWeekModal">Add New Week</button>
-                            </br></br>
 
                             <!-- Tab panes -->
-                            
-                                        <table class="table table-striped table-bordered table-hover" id="table-weeks" style="font-size: 13px; width: 100%;">
+                            <div class="tab-content" style="margin-top: 10px;">
+                                <div class="tab-pane fade in active" id="volunteers">
+                                        <table class="table table-striped table-bordered table-hover" id="table-volunteers" style="font-size: 13px; width: 100%;">
                                             <thead>
                                                 <tr>
-                                                    <th>Week</th>
-                                                    <th>Sunday</th>
-                                                    <th>Monday</th>
-                                                    <th>Tuesday</th>
-                                                    <th>Wednesday</th>
-                                                    <th>Thursday</th>
-                                                    <th>Friday</th>
-                                                    <th>Saturday</th>
+                                                    <th>First Name</th>
+                                                    <th>Last Name</th>
+                                                    <th>Class</th>
+                                                    <th>School</th>
+                                                    <th>Major</th>
+                                                    <th>Minor</th>
+                                                    <th>Hometown</th>
+                                                    <th>Email</th>
+                                                    <th>Phone</th>
+                                                    <th>Eagle Id</th>
                                                 </tr>
                                                 <tr>
-                                                    <td>Week</td>
-                                                    <td>Sunday</td>
-                                                    <td>Monday</td>
-                                                    <td>Tuesday</td>
-                                                    <td>Wednesday</td>
-                                                    <td>Thursday</td>
-                                                    <td>Friday</td>
-                                                    <td>Saturday</td>
+                                                    <td>First Name</td>
+                                                    <td>Last Name</td>
+                                                    <td>Class</td>
+                                                    <td>School</td>
+                                                    <td>Major</td>
+                                                    <td>Minor</td>
+                                                    <td>Hometown</td>
+                                                    <td>Email</td>
+                                                    <td>Phone</td>
+                                                    <td>Eagle Id</td>
                                                 </tr>
                                             </thead>
                                             
-                                            <tbody id="tablebody-weeks">
+                                            <tbody id="tablebody-volunteers">
                                                 
                                             </tbody>
                                         </table>
                                     
+                                </div>
                                 
+                            </div>
                         </div>
                         <!-- /.panel-body -->
                     
@@ -294,68 +266,6 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
 
     </div>
     <!-- /#wrapper -->
-
-     <!-- MODAL FOR Registration -->
-        <div id="addWeekModal" class="modal fade" role="dialog">
-              <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Add New Week</h4>
-                  </div>
-                  <div class="modal-body">
-                    <form method="POST" id="addWeekForm" name="addWeekForm">
-                    <div class="form-group">
-                        <label for="semester-form">Semester:</label>
-                        <input type="text" name="semester-form" class="form-control" id="semester-form" readonly required>
-                    </div>    
-                    <div class="form-group">
-                        <label for="year-form">Year:</label>
-                        <input type="text" name="year-form" class="form-control" id="year-form" readonly required>
-                    </div>    
-                    <div class="form-group">
-                        <label for="eagleid">Week Number:</label>
-                        <input type="number" name="week-number" class="form-control" id="week-number" placeholder="Week Number" required>
-                    </div>    
-                    <div class="form-group">
-                        <label for="sunday">Sunday Date:</label>
-                        <input type="date" name="sunday-date" class="form-control" id="sunday-date" placeholder="Sunday Date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="moday-date">Monday Date:</label>
-                        <input type="date" name="monday-date" class="form-control" id="monday-date" placeholder="Monday Date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="tuesday-date">Tuesday Date:</label>
-                        <input type="date" name="tuesday-date" class="form-control" id="tuesday-date" placeholder="Tuesday Date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="wednesday-date">Wednesday Date:</label>
-                        <input type="date" name="wednesday-date" class="form-control" id="wednesday-date" placeholder="Wednesday Date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="thursday-date">Thursday Date:</label>
-                        <input type="date" name="thursday-date" class="form-control" id="thursday-date" placeholder="Thursday Date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="friday-date">Friday Date:</label>
-                        <input type="date" name="friday-date" class="form-control" id="friday-date" placeholder="Friday Date" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="saturday-date">Saturday Date:</label>
-                        <input type="date" name="saturday-date" class="form-control" id="saturday-date" placeholder="Saturday Date" required>
-                    </div>
-                    <input type="submit" name="submit" id="modalFormSubmit" value="Add Week" class="btn btn-default"></input>
-                    </form>
-                  </div>
-                <div class="modal-footer">
-                    <button type="button" id="submitWeek" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-                </div>
-              </div>
-            </div>
-            <!--end MODAL -->
 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
@@ -380,7 +290,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
     <script>
     $(document).ready(function() {
     // Setup - add a text input to each footer cell
-        $('#table-weeks thead td').each( function () {
+        $('#table-volunteers thead td').each( function () {
             var title = $(this).text();
             $(this).css('text-align', 'center');
             $(this).html( '<input type="text"/>' );
@@ -388,38 +298,33 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
         } );
      
         // DataTable
-        var tableWeek = $('#table-weeks').DataTable({
+        var tableVols = $('#table-volunteers').DataTable({
             responsive: true,
             orderCellsTop: true,
             "columnDefs": [
             {
-                "targets": [8],
+                "targets": [9],
                 "visible": false,
                 "orderable": false
                 
             }]
-            
         });
-        var s = document.getElementById("table-semester");
-        var selectedSemester = s.options[s.selectedIndex].value;
-        var y = document.getElementById("table-year");
-        var selectedYear = y.options[y.selectedIndex].value;
-        $.getJSON("../include/getWeek.php", 
+        $.getJSON("../include/getAllUsers.php", 
             {
-                semester: selectedSemester,
-                year: selectedYear
+                active: "Yes"
             }, function(data) {
                 $.each(data, function(i, item) {
-                    tableWeek.row.add([
-                        item.week_number,
-                        item.sunday_date,
-                        item.monday_date,
-                        item.tuesday_date,
-                        item.wednesday_date,
-                        item.thursday_date,
-                        item.friday_date,
-                        item.saturday_date,
-                        item.week_id
+                    tableVols.row.add([
+                        item.first_name,
+                        item.last_name,
+                        item.class,
+                        item.school,
+                        item.major,
+                        item.minor,
+                        item.hometown + ", " + item.state_country,
+                        item.email,
+                        item.phone,
+                        item.eagle_id
                     ]);
                 });
             })
@@ -428,47 +333,43 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             });
 
             setTimeout(function() {
-            tableWeek.draw();
+            tableVols.draw();
         }, 300);
      
         // Apply the search
-        tableWeek.columns().every(function (index) {
-        $('#table-weeks thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
-            tableWeek.column($(this).parent().index() + ':visible')
+        tableVols.columns().every(function (index) {
+        $('#table-volunteers thead tr:eq(1) td:eq(' + index + ') input').on('keyup change', function () {
+            tableVols.column($(this).parent().index() + ':visible')
                 .search(this.value)
                 .draw();
             } );
         } );
+    
+
 
         $('#semester-submit').on("click", function() {
+            var a = document.getElementById("table-active");
+            var selectedActive = a.options[a.selectedIndex].value;
             
-            var s = document.getElementById("table-semester");
-            var selectedSemester = s.options[s.selectedIndex].value;
-            var y = document.getElementById("table-year");
-            var selectedYear = y.options[y.selectedIndex].value;
-            tableWeek.clear();
-
-           
-
-            //document.getElementById("panels-header").innerHTML = "HELLO";
+            tableVols.clear();
             
             
-            $.getJSON("../include/getWeek.php", 
+            $.getJSON("../include/getAllUsers.php", 
             {
-                semester: selectedSemester,
-                year: selectedYear
+                active: selectedActive
             }, function(data) {
                 $.each(data, function(i, item) {
-                    tableWeek.row.add([
-                        item.week_number,
-                        item.sunday_date,
-                        item.monday_date,
-                        item.tuesday_date,
-                        item.wednesday_date,
-                        item.thursday_date,
-                        item.friday_date,
-                        item.saturday_date,
-                        item.week_id
+                    tableVols.row.add([
+                        item.first_name,
+                        item.last_name,
+                        item.class,
+                        item.school,
+                        item.major,
+                        item.minor,
+                        item.hometown + ", " + item.state_country,
+                        item.email,
+                        item.phone,
+                        item.eagle_id
                     ]);
                 });
             })
@@ -477,33 +378,34 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
             });
 
             setTimeout(function() {
-            tableWeek.draw();
+            tableVols.draw();
         }, 300);
-            
-            
         });
+
+
         
-        $('#table-weeks tbody').on('dblclick', 'td', function(e) {
+        $('#table-volunteers tbody').on('dblclick', 'td', function(e) {
             var currentEle = $(this);
-            var value = $(this).html();
-            var row = tableWeek.cell($(this)).index().row;
-            var column = tableWeek.cell($(this)).index().column;
-            
-            var data = tableWeek.row(row).data();
-            var updateField = ['week_number', 'sunday_date', 'monday_date', 'tuesday_date', 'wednesday_date', 'thursday_date', 'friday_date', 'saturday_date'];
-            
-            $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + value + '" />');
+            var valueT = $(this).html();
+            var row = tableVols.cell($(this)).index().row;
+            var column = tableVols.cell($(this)).index().column;
+            var data = tableVols.row(row).data();
+            var updateField = ['first_name', 'last_name', 'class', 'school', 'major', 'minor', 'hometown', 'email', 'phone'];
+            setTimeout(function() {
+            $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + valueT + '" />');
             $(".thVal").focus();
             $(".thVal").keyup(function (event) {
             if (event.keyCode == 13) {
                
                 data[column] =  document.getElementById("newvalue").value.trim();
-                tableWeek.row(row).remove();
-                $.post("../include/inlineUpdateWeek.php",
+                tableVols.row(row).remove();
+                $.post("../include/inlineUpdateTable.php",
                 {
-                    id : data[8],
+                    id : data[9],
                     field : updateField[column],
-                    newValue : data[column]
+                    table : 'Users',
+                    newValue : data[column],
+                    whereField : 'eagle_id'
                 },
               function(data){
                 if(data) {
@@ -512,7 +414,7 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                 });
 
                 setTimeout( function(){
-                tableWeek.row.add([
+                tableVols.row.add([
                     data[0],
                     data[1],
                     data[2],
@@ -521,59 +423,21 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                     data[5],
                     data[6],
                     data[7],
-                    data[8]
+                    data[8],
+                    data[9]
 
                 ]).draw();
             }, 100);
             }
         });
+        },50);
             $('tbody td').not(currentEle).on('click', function() {
 
-                $(currentEle).html(value);
+                $(currentEle).html(valueT);
             });
             $(currentEle).on("dblclick", function() {
-                $(currentEle).html(value);
+                $(currentEle).html(valueT);
             });  
-        });
-
-        $("#openModalButton").on("click", function() {
-            var s = document.getElementById("table-semester");
-            var selectedSemester = s.options[s.selectedIndex].value;
-            var y = document.getElementById("table-year");
-            var selectedYear = y.options[y.selectedIndex].value;
-            document.getElementById("year-form").value = selectedYear;
-            document.getElementById("semester-form").value = selectedSemester;
-        });
-
-        $("#addWeekForm").on("submit", function(e) {
-            var formWeek = document.getElementById("week-number").value;
-            var formYear = document.getElementById("year-form").value;
-            var formSemester = document.getElementById("semester-form").value;
-            var formSun = document.getElementById("sunday-date").value;
-            var formMon = document.getElementById("monday-date").value;
-            var formTues = document.getElementById("tuesday-date").value;
-            var formWed = document.getElementById("wednesday-date").value;
-            var formThurs = document.getElementById("thursday-date").value;
-            var formFri = document.getElementById("friday-date").value;
-            var formSat = document.getElementById("saturday-date").value;
-            $.post("../include/insertProgrammingWeek.php",
-                {
-                    week : formWeek,
-                    year : formYear,
-                    semester : formSemester,
-                    sun : formSun,
-                    mon : formMon,
-                    tues : formTues,
-                    wed : formWed,
-                    thurs : formThurs,
-                    fri : formFri,
-                    sat : formSat
-                },
-              function(data){
-                if(data) {
-                  
-                }
-            });
         });
     });
     </script>

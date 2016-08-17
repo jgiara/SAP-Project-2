@@ -129,6 +129,9 @@ date_default_timezone_set('EST');
                         <?php 
                             if(in_array('Council', $roles) || in_array('Staff', $roles) || in_array('Admin', $roles)) {
                                 echo "<li>
+                                        <a href='./users.php'>All Users</a>
+                                    </li>
+                                    <li>
                                         <a href='./panels.php'>Panels</a>
                                     </li>
                                     <li>

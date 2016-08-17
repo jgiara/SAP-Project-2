@@ -128,6 +128,9 @@ echo "<input type='hidden' id='userid' value='$eagleid'/>";
                         <?php 
                             if(in_array('Council', $roles) || in_array('Staff', $roles) || in_array('Admin', $roles)) {
                                 echo "<li>
+                                        <a href='./users.php'>All Users</a>
+                                    </li>
+                                    <li>
                                         <a href='./panels.php'>Panels</a>
                                     </li>
                                     <li>

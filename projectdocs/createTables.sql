@@ -34,7 +34,7 @@ applied_tours int(1),
 applied_panels int(1),
 applied_council int(1),
 applied_summer int(1),
-active varchar(3) not null check(active in ('Yes', 'No', 'Abroad', 'Prac/Clinical')));
+active varchar(3) not null check(active in ('Yes', 'No', 'Abroad', 'Prac/Clinical', 'Graduated')));
 
 create table Groups (
 	group_id int(10) not null auto_increment primary key,
