@@ -228,6 +228,7 @@ date_default_timezone_set('EST');
                                                     <th>Major</th>
                                                     <th>Minor</th>
                                                     <th>Hometown</th>
+                                                    <th>State</th>
                                                     <th>Email</th>
                                                     <th>Phone</th>
                                                     <th>Eagle Id</th>
@@ -240,6 +241,7 @@ date_default_timezone_set('EST');
                                                     <td>Major</td>
                                                     <td>Minor</td>
                                                     <td>Hometown</td>
+                                                    <td>State</td>
                                                     <td>Email</td>
                                                     <td>Phone</td>
                                                     <td>Eagle Id</td>
@@ -303,7 +305,7 @@ date_default_timezone_set('EST');
             orderCellsTop: true,
             "columnDefs": [
             {
-                "targets": [9],
+                "targets": [10],
                 "visible": false,
                 "orderable": false
                 
@@ -321,7 +323,8 @@ date_default_timezone_set('EST');
                         item.school,
                         item.major,
                         item.minor,
-                        item.hometown + ", " + item.state_country,
+                        item.hometown,
+                        item.state_country,
                         item.email,
                         item.phone,
                         item.eagle_id
@@ -366,7 +369,8 @@ date_default_timezone_set('EST');
                         item.school,
                         item.major,
                         item.minor,
-                        item.hometown + ", " + item.state_country,
+                        item.hometown,
+                        item.state_country,
                         item.email,
                         item.phone,
                         item.eagle_id
@@ -390,7 +394,7 @@ date_default_timezone_set('EST');
             var row = tableVols.cell($(this)).index().row;
             var column = tableVols.cell($(this)).index().column;
             var data = tableVols.row(row).data();
-            var updateField = ['first_name', 'last_name', 'class', 'school', 'major', 'minor', 'hometown', 'email', 'phone'];
+            var updateField = ['first_name', 'last_name', 'class', 'school', 'major', 'minor', 'hometown', 'state_country', 'email', 'phone'];
             setTimeout(function() {
             $(currentEle).html('<input id="newvalue" class="thVal" type="text" value="' + valueT + '" />');
             $(".thVal").focus();
@@ -401,7 +405,7 @@ date_default_timezone_set('EST');
                 tableVols.row(row).remove();
                 $.post("../include/inlineUpdateTable.php",
                 {
-                    id : data[9],
+                    id : data[10],
                     field : updateField[column],
                     table : 'Users',
                     newValue : data[column],
@@ -424,7 +428,8 @@ date_default_timezone_set('EST');
                     data[6],
                     data[7],
                     data[8],
-                    data[9]
+                    data[9], 
+                    data[10]
 
                 ]).draw();
             }, 100);
