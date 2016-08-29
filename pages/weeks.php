@@ -15,6 +15,11 @@ foreach($groups as $group) {
     array_push($roles, $group['group_name']);
 }
 
+if(!(in_array('Council', $roles)) && !(in_array('Staff', $roles)) && !(in_array('Admin', $roles))) {
+    header('Location: ./dashboard.php');
+    exit();
+}
+
 echo "<input type='hidden' id='userid' value='$eagleid'/>";
 
 ?>

@@ -8,11 +8,13 @@ $user     = $users->userdata($_SESSION['Eagle_Id']);
 $eagleid  = $user['eagle_id'];
 
 $groups = $users->get_roles($eagleid);
-
-
 $roles = [];
 foreach($groups as $group) {
     array_push($roles, $group['group_name']);
+}
+if(!(in_array('Council', $roles)) && !(in_array('Staff', $roles)) && !(in_array('Admin', $roles))) {
+    header('Location: ./dashboard.php');
+    exit();
 }
 
 echo "<input type='hidden' id='userid' value='$eagleid'/>";
@@ -264,7 +266,7 @@ date_default_timezone_set('EST');
 
                                 </div>
                                 <button class="btn btn-primary" id="semester-submit">Go</button>
-                                <button class="btn btn-success" id="newAttendance" style="margin-left: 10px;">New Attendance</button>
+                                <!--<button class="btn btn-success" id="newAttendance" style="margin-left: 10px;">Populate Sheet</button>-->
 
                             <ul id="tabs-list" class="nav nav-tabs" style="margin-top: 10px;">
                                 <li id="volunteers-tab" class="active"><a href="#volunteers" data-toggle="tab">Volunteers</a>
@@ -736,19 +738,23 @@ date_default_timezone_set('EST');
     function hideSelects(){
         var weekSelect = document.getElementById("table-week");
         var daySelect = document.getElementById("table-day");
-        var newAttnButton = document.getElementById("newAttendance");
-        weekSelect.style.visibility = 'hidden';
-        daySelect.style.visibility = 'hidden';
-        newAttendance.style.visibility = 'hidden';
+        //var newAttnButton = document.getElementById("newAttendance");
+        //weekSelect.style.visibility = 'hidden';
+        //daySelect.style.visibility = 'hidden';
+        $('#table-week').attr('disabled', true);
+        $('#table-day').attr('disabled', true);
+        //newAttendance.style.visibility = 'hidden';
     }
 
     function showSelects(){
         var weekSelect = document.getElementById("table-week");
         var daySelect = document.getElementById("table-day");
-        var newAttnButton = document.getElementById("newAttendance");
-        weekSelect.style.visibility = 'visible';
-        daySelect.style.visibility = 'visible';
-        newAttendance.style.visibility = 'visible';
+        //var newAttnButton = document.getElementById("newAttendance");
+        //weekSelect.style.visibility = 'visible';
+        //daySelect.style.visibility = 'visible';
+        $('#table-week').attr('disabled', false);
+        $('#table-day').attr('disabled', false);
+        //newAttendance.style.visibility = 'visible';
     }
     </script>
 

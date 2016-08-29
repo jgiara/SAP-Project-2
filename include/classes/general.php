@@ -18,4 +18,11 @@ class General{
 			exit();
 		}	
 	}
+
+	public function page_access_protect() {
+		if($_SESSION['Access'] != 'Council' && $_SESSION['Access'] != 'Staff') {
+			header('Location: ./dashboard.php');
+			exit();
+		}
+	}
 }
